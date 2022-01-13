@@ -111,7 +111,7 @@
             android:layout_width="77dp"
             android:layout_height="56dp"
             app:srcCompat="@drawable/ic_baseline_navigate_next_24"
-            android:id="@+id/imageView2"
+            android:id="@+id/ivNext_QuziActivity"
             tools:layout_editor_absoluteY="530dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
