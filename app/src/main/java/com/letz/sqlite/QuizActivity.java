@@ -8,11 +8,17 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class QuizActivity extends AppCompatActivity
 {
     private TextView tvCorrect, tvWrong, tvEmpty;
     private ImageView ivFlag, ivNext;
     private Button btnA, btnB, btnC, btnD;
+
+    private FlagsDatabase flagsDatabase;
+    private ArrayList<FlagsModel> questionList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +33,9 @@ public class QuizActivity extends AppCompatActivity
         btnB = findViewById(R.id.btnB_QuizActivity);
         btnC = findViewById(R.id.btnC_QuizActivity);
         btnD = findViewById(R.id.btnD_QuizActivity);
+
+        flagsDatabase = new FlagsDatabase(QuizActivity.this);
+        questionList = new FlagsDAO().getRandomTenQuestion(flagsDatabase);
 
         // Onclick
         btnA.setOnClickListener(new View.OnClickListener()

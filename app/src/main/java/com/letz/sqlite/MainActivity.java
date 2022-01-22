@@ -22,15 +22,29 @@ public class MainActivity extends AppCompatActivity
         tvStart = findViewById(R.id.tvWelcom_Main);
         btnStart = findViewById(R.id.btnStart_Main);
 
+        copyDatabase();
+
         btnStart.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view) {
-                Intent igoQuizActivity = new Intent(MainActivity.this,QuizActivity.class);
+                Intent igoQuizActivity = new Intent(MainActivity.this, QuizActivity.class);
                 startActivity(igoQuizActivity);
                 finish();
             }
         });
     }
+
+    public void copyDatabase() {
+        try {
+            DatabaseCopyHelper helper = new DatabaseCopyHelper(MainActivity.this);
+            helper.createDataBase();
+            helper.openDataBase();
+
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+}
 
 }
