@@ -19,12 +19,14 @@ public class QuizActivity extends AppCompatActivity
     private FlagsDatabase flagsDatabase;
     private ArrayList<FlagsModel> questionList;
 
+
     int correct = 0;
     int wrong = 0;
     int empty = 0;
     int question = 0;
 
     private FlagsModel correctFlag; // create model for what?
+    private ArrayList<FlagsModel> wrongOptionsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,5 +87,8 @@ public class QuizActivity extends AppCompatActivity
         ivFlag.setImageResource(getResources().getIdentifier(
                 correctFlag.getFlag_name(),"drawable", getPackageName()
         ));
+
+        wrongOptionsList = new FlagsDAO().getRandomThreeOptions(flagsDatabase,correctFlag.getFlag_id());
+
     }
 }
