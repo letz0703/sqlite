@@ -12,12 +12,19 @@ import java.util.ArrayList;
 
 public class QuizActivity extends AppCompatActivity
 {
-    private TextView tvCorrect, tvWrong, tvEmpty;
+    private TextView tvCorrect, tvWrong, tvEmpty, tvQuestion;
     private ImageView ivFlag, ivNext;
     private Button btnA, btnB, btnC, btnD;
 
     private FlagsDatabase flagsDatabase;
     private ArrayList<FlagsModel> questionList;
+
+    int correct = 0;
+    int wrong = 0;
+    int empty = 0;
+    int question = 0;
+
+    private FlagsModel correctFlag; // create model for what?
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +34,7 @@ public class QuizActivity extends AppCompatActivity
         tvCorrect = findViewById(R.id.tvCorrect_QuizActivity);
         tvWrong = findViewById(R.id.tvWrong_QuizActivity);
         tvEmpty = findViewById(R.id.tvEmpty_QuizActivity);
+        tvQuestion = findViewById(R.id.tvQuestion_QuizActivity);
         ivFlag = findViewById(R.id.ivFlag_QuizActivity);
         ivNext = findViewById(R.id.ivNext_QuziActivity);
         btnA = findViewById(R.id.btnA_QuizActivity);
@@ -38,6 +46,7 @@ public class QuizActivity extends AppCompatActivity
         questionList = new FlagsDAO().getRandomTenQuestion(flagsDatabase);
 
         // Onclick
+        loadQuestions();
         btnA.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -66,6 +75,15 @@ public class QuizActivity extends AppCompatActivity
 
             }
         });
+    }
 
+    public void loadQuestions() {
+        tvQuestion.setText("Question : "+questionList);
+
+        correctFlag = questionList.get(question);
+
+        ivFlag.setImageResource(getResources().getIdentifier(
+                correctFlag.getFlag_name(),"drawable", getPackageName()
+        ));
     }
 }
