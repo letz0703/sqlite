@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class QuizActivity extends AppCompatActivity
 {
@@ -27,6 +28,10 @@ public class QuizActivity extends AppCompatActivity
 
     private FlagsModel correctFlag; // create model for what?
     private ArrayList<FlagsModel> wrongOptionsList;
+
+    HashSet<FlagsModel> mixOptions = new HashSet<>();
+    ArrayList<FlagsModel> options = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +85,7 @@ public class QuizActivity extends AppCompatActivity
     }
 
     public void loadQuestions() {
-        tvQuestion.setText("Question : "+questionList);
+        tvQuestion.setText("Question : "+question+1);
 
         correctFlag = questionList.get(question);
 
@@ -89,6 +94,17 @@ public class QuizActivity extends AppCompatActivity
         ));
 
         wrongOptionsList = new FlagsDAO().getRandomThreeOptions(flagsDatabase,correctFlag.getFlag_id());
+        mixOptions.clear();
+        mixOptions.add(correctFlag);
+        mixOptions.add(wrongOptionsList.get(0));
+        mixOptions.add(wrongOptionsList.get(1));
+        mixOptions.add(wrongOptionsList.get(2));
+
+        options.clear();
+        for (FlagsModel flg : mixOptions)
+        {
+
+        }
 
     }
 }
