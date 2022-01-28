@@ -2,6 +2,7 @@ package com.letz.sqlite;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -58,7 +59,7 @@ public class QuizActivity extends AppCompatActivity
         {
             @Override
             public void onClick(View view) {
-
+                answerControl(btnA);
             }
         });
         btnB.setOnClickListener(new View.OnClickListener()
@@ -66,12 +67,14 @@ public class QuizActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
 
+                answerControl(btnB);
             }
         });
         btnC.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view) {
+                answerControl(btnC);
 
             }
         });
@@ -79,21 +82,41 @@ public class QuizActivity extends AppCompatActivity
         {
             @Override
             public void onClick(View view) {
+                answerControl(btnD);
+            }
+        });
 
+        ivNext.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view) {
+                // inc. value of question var.
+                question++;
+                loadQuestions();
+
+                btnA.setClickable(true);
+                btnB.setClickable(true);
+                btnC.setClickable(true);
+                btnD.setClickable(true);
+
+                btnA.setBackgroundColor(getResources().getColor(R.color.design_default_color_primary_dark));
+                btnB.setBackgroundColor(getResources().getColor(R.color.design_default_color_primary_dark));
+                btnC.setBackgroundColor(getResources().getColor(R.color.design_default_color_primary_dark));
+                btnD.setBackgroundColor(getResources().getColor(R.color.design_default_color_primary_dark));
             }
         });
     }
 
     public void loadQuestions() {
-        tvQuestion.setText("Question : "+question+1);
+        tvQuestion.setText("Question : " + (question + 1));
 
         correctFlag = questionList.get(question);
 
         ivFlag.setImageResource(getResources().getIdentifier(
-                correctFlag.getFlag_name(),"drawable", getPackageName()
+                correctFlag.getFlag_name(), "drawable", getPackageName()
         ));
 
-        wrongOptionsList = new FlagsDAO().getRandomThreeOptions(flagsDatabase,correctFlag.getFlag_id());
+        wrongOptionsList = new FlagsDAO().getRandomThreeOptions(flagsDatabase, correctFlag.getFlag_id());
         mixOptions.clear();
         mixOptions.add(correctFlag);
         mixOptions.add(wrongOptionsList.get(0));
@@ -101,10 +124,50 @@ public class QuizActivity extends AppCompatActivity
         mixOptions.add(wrongOptionsList.get(2));
 
         options.clear();
-        for (FlagsModel flg : mixOptions)
+        for (FlagsModel flg : mixOptions) // (condition) ? [true path] : [false path];
         {
-
+            options.add(flg);
         }
+
+        btnA.setText(options.get(0).getFlag_name());
+        btnB.setText(options.get(1).getFlag_name());
+        btnC.setText(options.get(2).getFlag_name());
+        btnD.setText(options.get(3).getFlag_name());
+    }
+
+    public void answerControl(Button button) {
+        String buttonText = button.getText().toString();
+        String correctAnswer = correctFlag.getFlag_name();
+
+        if (buttonText.equals(correctAnswer)) {
+            correct++;
+            button.setBackgroundColor(Color.GREEN);
+        } else {
+            wrong++;
+            button.setBackgroundColor(Color.RED);
+
+            if (btnA.getText().toString().equals(correctAnswer)) {
+                btnA.setBackgroundColor(Color.GREEN);
+            }
+            if (btnB.getText().toString().equals(correctAnswer)) {
+                btnB.setBackgroundColor(Color.GREEN);
+            }
+            if (btnC.getText().toString().equals(correctAnswer)) {
+                btnC.setBackgroundColor(Color.GREEN);
+            }
+            if (btnD.getText().toString().equals(correctAnswer)) {
+                btnD.setBackgroundColor(Color.GREEN);
+            }
+        }
+
+        btnA.setClickable(false);
+        btnB.setClickable(false);
+        btnC.setClickable(false);
+        btnD.setClickable(false);
+        // 정답 오답 갯수 표시
+        tvCorrect.setText("Correct: "+correct);
+        tvWrong.setText("Wrong: "+wrong);
+
 
     }
 }
