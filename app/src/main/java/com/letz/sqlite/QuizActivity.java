@@ -2,6 +2,7 @@ package com.letz.sqlite;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -33,6 +34,7 @@ public class QuizActivity extends AppCompatActivity
     HashSet<FlagsModel> mixOptions = new HashSet<>();
     ArrayList<FlagsModel> options = new ArrayList<>();
 
+    boolean buttonControl = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,17 +94,36 @@ public class QuizActivity extends AppCompatActivity
             public void onClick(View view) {
                 // inc. value of question var.
                 question++;
-                loadQuestions();
 
-                btnA.setClickable(true);
-                btnB.setClickable(true);
-                btnC.setClickable(true);
-                btnD.setClickable(true);
+                if (!buttonControl && question < 10) {
+                    empty++;
+                    tvEmpty.setText("Empty:" + empty);
+                    loadQuestions();
+                } else if (buttonControl && question < 10) {
+                    loadQuestions();
 
-                btnA.setBackgroundColor(getResources().getColor(R.color.design_default_color_primary_dark));
-                btnB.setBackgroundColor(getResources().getColor(R.color.design_default_color_primary_dark));
-                btnC.setBackgroundColor(getResources().getColor(R.color.design_default_color_primary_dark));
-                btnD.setBackgroundColor(getResources().getColor(R.color.design_default_color_primary_dark));
+                    btnA.setClickable(true);
+                    btnB.setClickable(true);
+                    btnC.setClickable(true);
+                    btnD.setClickable(true);
+
+                    btnA.setBackgroundColor(getResources().getColor(R.color.design_default_color_primary_dark));
+                    btnB.setBackgroundColor(getResources().getColor(R.color.design_default_color_primary_dark));
+                    btnC.setBackgroundColor(getResources().getColor(R.color.design_default_color_primary_dark));
+                    btnD.setBackgroundColor(getResources().getColor(R.color.design_default_color_primary_dark));
+                }
+
+                else if (question == 10)
+                {
+                    Intent igoResultActivity = new Intent(QuizActivity.this,ResultActivity.class);
+                    igoResultActivity.putExtra("correct", correct);
+                    igoResultActivity.putExtra("wrong", wrong);
+                    igoResultActivity.putExtra("empty", empty);
+                    startActivity(igoResultActivity);
+                    finish();
+                }
+                buttonControl = false;
+
             }
         });
     }
@@ -165,9 +186,9 @@ public class QuizActivity extends AppCompatActivity
         btnC.setClickable(false);
         btnD.setClickable(false);
         // 정답 오답 갯수 표시
-        tvCorrect.setText("Correct: "+correct);
-        tvWrong.setText("Wrong: "+wrong);
+        tvCorrect.setText("Correct: " + correct);
+        tvWrong.setText("Wrong: " + wrong);
 
-
+        buttonControl = true;
     }
 }
